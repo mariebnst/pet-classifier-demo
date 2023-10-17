@@ -37,6 +37,7 @@ public class BatchConfiguration {
         return new FlatFileItemReaderBuilder<PetCsvLine>()
                 .name("pet-item-reader")
                 .resource(new ClassPathResource("sample-data.csv"))
+                .linesToSkip(1)
                 .delimited()
                 .names("name", "status", "species")
                 .fieldSetMapper(new RecordFieldSetMapper<>(PetCsvLine.class))
