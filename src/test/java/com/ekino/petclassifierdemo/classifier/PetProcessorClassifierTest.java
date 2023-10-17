@@ -14,9 +14,9 @@ import static org.assertj.core.api.Assertions.*;
 class PetProcessorClassifierTest {
 
     private final PetProcessorClassifier CLASSIFIER = new PetProcessorClassifier(
-            it -> new PetToUpdate(),
-            it -> new PetToDelete(),
-            it -> new PetToCreate()
+            it -> new PetToUpdate(it.name(), it.status()),
+            it -> new PetToDelete(it.name()),
+            it -> new PetToCreate(it.name(), it.status(), it.species())
     );
 
     @Test

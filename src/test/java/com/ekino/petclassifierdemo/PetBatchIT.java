@@ -1,8 +1,8 @@
 package com.ekino.petclassifierdemo;
 
-import com.ekino.petclassifierdemo.mapper.PetDbRowMapper;
+import java.util.Map;
+
 import com.ekino.petclassifierdemo.model.AdoptionStatus;
-import com.ekino.petclassifierdemo.model.PetDbEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -32,14 +32,17 @@ class PetBatchIT {
         //then
         assertThat(jobExecution.getExitStatus()).isEqualTo(ExitStatus.COMPLETED);
 
-        var petsInDb = jdbcTemplate.query("SELECT id, name, status, species FROM pet", new PetDbRowMapper());
+        var petsInDb = jdbcTemplate.queryForList("SELECT name, status, species FROM pet");
         assertThat(petsInDb)
-                .extracting(PetDbEntity::name, PetDbEntity::status, PetDbEntity::species)
                 .containsExactlyInAnyOrder(
-                        tuple("Isaac Mewton", AdoptionStatus.NEW, "cat"),
-                        tuple("Chris P. Bacon", AdoptionStatus.NEW, "pig"),
-                        tuple("Frodog", AdoptionStatus.WAITING, "dog"),
-                        tuple("Meowy Poppins", AdoptionStatus.AVAILABLE, "cat")
+                        petMap("Isaac Mewton", AdoptionStatus.NEW, "cat"),
+                        petMap("Chris P. Bacon", AdoptionStatus.NEW, "pig"),
+                        petMap("Frodog", AdoptionStatus.WAITING, "dog"),
+                        petMap("Meowy Poppins", AdoptionStatus.AVAILABLE, "cat")
                 );
+    }
+
+    private static Map<String, Object> petMap(String name, AdoptionStatus status, String species) {
+        return Map.of("NAME", name, "STATUS", status.toString(), "SPECIES", species);
     }
 }
