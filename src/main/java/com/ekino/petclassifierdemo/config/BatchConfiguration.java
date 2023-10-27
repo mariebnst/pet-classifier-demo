@@ -1,6 +1,6 @@
 package com.ekino.petclassifierdemo.config;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import com.ekino.petclassifierdemo.model.PetAction;
 import com.ekino.petclassifierdemo.model.PetCsvLine;
@@ -57,14 +57,13 @@ public class BatchConfiguration {
     public SubclassClassifier<PetAction, ItemWriter<? extends PetAction>> writerClassifier(ItemWriter<PetToDelete> deletePetWriter,
                                                                                            ItemWriter<PetToCreate> createPetWriter,
                                                                                            ItemWriter<PetToUpdate> updatePetWriter) {
-        var typeMap = new HashMap<Class<? extends PetAction>, ItemWriter<? extends PetAction>>();
-        typeMap.put(PetToDelete.class, deletePetWriter);
-        typeMap.put(PetToCreate.class, createPetWriter);
-        typeMap.put(PetToUpdate.class, updatePetWriter);
+        var typeMap = Map.of(
+                PetToDelete.class, deletePetWriter,
+                PetToCreate.class, createPetWriter,
+                PetToUpdate.class, updatePetWriter
+        );
 
-        var classifier = new SubclassClassifier<PetAction, ItemWriter<? extends PetAction>>();
-        classifier.setTypeMap(typeMap);
-        return classifier;
+        return new SubclassClassifier<>(typeMap, null);
     }
 
     @Bean
@@ -86,7 +85,6 @@ public class BatchConfiguration {
                 .processor(petProcessor)
                 .writer(petWriter)
                 .build();
-
     }
 
     @Bean
