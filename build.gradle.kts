@@ -18,14 +18,9 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-batch")
 	runtimeOnly("org.hsqldb:hsqldb")
-	compileOnly("org.projectlombok:lombok")
-
-	annotationProcessor("org.projectlombok:lombok")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.batch:spring-batch-test")
-	testImplementation("org.projectlombok:lombok")
-	testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.withType<Test> {

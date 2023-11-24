@@ -5,18 +5,24 @@ import com.ekino.petclassifierdemo.model.PetCsvLine;
 import com.ekino.petclassifierdemo.model.PetToCreate;
 import com.ekino.petclassifierdemo.model.PetToDelete;
 import com.ekino.petclassifierdemo.model.PetToUpdate;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.classify.Classifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class PetProcessorClassifier implements Classifier<PetCsvLine, ItemProcessor<?, ? extends PetAction>> {
 
     private final ItemProcessor<PetCsvLine, PetToUpdate> updatedPetProcessor;
     private final ItemProcessor<PetCsvLine, PetToDelete> adoptedPetProcessor;
     private final ItemProcessor<PetCsvLine, PetToCreate> newPetProcessor;
+
+    public PetProcessorClassifier(ItemProcessor<PetCsvLine, PetToUpdate> updatedPetProcessor,
+                                  ItemProcessor<PetCsvLine, PetToDelete> adoptedPetProcessor,
+                                  ItemProcessor<PetCsvLine, PetToCreate> newPetProcessor) {
+        this.updatedPetProcessor = updatedPetProcessor;
+        this.adoptedPetProcessor = adoptedPetProcessor;
+        this.newPetProcessor = newPetProcessor;
+    }
 
     @Override
     public ItemProcessor<PetCsvLine, ? extends PetAction> classify(PetCsvLine petLine) {

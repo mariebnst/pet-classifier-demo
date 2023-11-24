@@ -6,17 +6,21 @@ import java.util.UUID;
 import com.ekino.petclassifierdemo.model.PetToCreate;
 import com.ekino.petclassifierdemo.model.PetToDelete;
 import com.ekino.petclassifierdemo.model.PetToUpdate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class PetService {
 
+    private static final Logger log = LogManager.getLogger(PetService.class);
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public PetService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     public void deletePet(PetToDelete petToDelete) {
         log.info("Delete pet with name: {}", petToDelete.getName());
